@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyNotepad - Catat Semua Idemu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-in-up {
+        animation: fadeInUp 0.8s ease-out;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+      .float {
+        animation: float 3s ease-in-out infinite;
+      }
+    </style>
+  </head>
+  <body class="bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center">
+            <span class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">MyNotepad</span>
+          </div>
+
+          <!-- Desktop Menu -->
+          <div class="hidden md:flex space-x-8">
+            <a href="#features" class="text-gray-700 hover:text-purple-600 transition">Fitur</a>
+            <a href="{% url 'about' %}" class="text-gray-700 hover:text-purple-600 transition">Tentang Kami</a>
+            <a href="{% url 'gallery' %}" class="text-gray-700 hover:text-purple-600 transition">Galeri</a>
+            <a href="#contact" class="text-gray-700 hover:text-purple-600 transition">Kontak</a>
+          </div>
+
+          <!-- Desktop Auth Buttons -->
+          <div class="hidden md:flex space-x-4">
+            <a href="{% url 'login' %}" class="px-4 py-2 text-purple-600 font-semibold hover:text-purple-700 transition">Masuk</a>
+            <a href="{% url 'register' %}" class="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition duration-200">Daftar</a>
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <div class="md:hidden">
+            <button id="mobile-menu-button" class="text-gray-700 hover:text-purple-600 focus:outline-none">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                <path id="close-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+        <div class="px-4 pt-2 pb-4 space-y-2">
+          <a href="#features" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">Fitur</a>
+          <a href="{% url 'about' %}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">Tentang Kami</a>
+          <a href="{% url 'gallery' %}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">Galeri</a>
+          <a href="#contact" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">Kontak</a>
+          <div class="pt-4 space-y-2">
+            <a href="{% url 'login' %}" class="block px-3 py-2 text-center rounded-lg text-purple-600 font-semibold border-2 border-purple-600 hover:bg-purple-50 transition">Masuk</a>
+            <a href="{% url 'register' %}" class="block px-3 py-2 text-center rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:shadow-lg transition">Daftar</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Script for Mobile Menu Toggle -->
+    <script>
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const menuIcon = document.getElementById("menu-icon");
+      const closeIcon = document.getElementById("close-icon");
+
+      mobileMenuButton.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+        menuIcon.classList.toggle("hidden");
+        closeIcon.classList.toggle("hidden");
+      });
+
+      // Close menu when clicking on a link
+      const mobileMenuLinks = mobileMenu.querySelectorAll("a");
+      mobileMenuLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.add("hidden");
+          menuIcon.classList.remove("hidden");
+          closeIcon.classList.add("hidden");
+        });
+      });
+    </script>
+
+    <!-- Hero Section -->
+    <section class="py-20 px-4">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div class="fade-in-up">
+            <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-6">Catat Semua <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">Idemu</span> di Satu Tempat</h1>
+            <p class="text-xl text-gray-600 mb-8">MyNotepad adalah aplikasi catatan digital yang membantu Anda mengorganisir ide, tugas, dan catatan penting dengan mudah dan efisien.</p>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a href="{% url 'register' %}" class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:shadow-xl transform hover:scale-105 transition duration-200 text-center"> Mulai Gratis </a>
+              <a href="#features" class="px-8 py-4 border-2 border-purple-600 text-purple-600 rounded-lg font-semibold hover:bg-purple-50 transition duration-200 text-center"> Pelajari Lebih Lanjut </a>
+            </div>
+          </div>
+          <div class="hidden md:block">
+            <div class="float">
+              <div class="bg-white rounded-2xl shadow-2xl p-8 transform rotate-3">
+                <div class="h-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded mb-4"></div>
+                <div class="h-3 bg-gray-200 rounded mb-3"></div>
+                <div class="h-3 bg-gray-200 rounded mb-3 w-5/6"></div>
+                <div class="h-3 bg-gray-200 rounded w-4/6"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-gray-800 mb-4">Fitur Unggulan</h2>
+          <p class="text-xl text-gray-600">Semua yang Anda butuhkan untuk mencatat dengan efektif</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 hover:shadow-xl transform hover:scale-105 transition duration-200">
+            <div class="text-5xl mb-4">📝</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3">Mudah Digunakan</h3>
+            <p class="text-gray-600">Interface yang intuitif memudahkan Anda membuat dan mengelola catatan dengan cepat.</p>
+          </div>
+          <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 hover:shadow-xl transform hover:scale-105 transition duration-200">
+            <div class="text-5xl mb-4">🔒</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3">Aman & Pribadi</h3>
+            <p class="text-gray-600">Setiap catatan Anda terlindungi dengan sistem autentikasi yang aman.</p>
+          </div>
+          <div class="bg-gradient-to-br from-pink-50 to-blue-50 rounded-2xl p-8 hover:shadow-xl transform hover:scale-105 transition duration-200">
+            <div class="text-5xl mb-4">⚡</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3">Cepat & Responsif</h3>
+            <p class="text-gray-600">Akses catatan Anda kapan saja dari berbagai perangkat dengan lancar.</p>
+          </div>
+          <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8 hover:shadow-xl transform hover:scale-105 transition duration-200">
+            <div class="text-5xl mb-4">🎨</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3">Desain Modern</h3>
+            <p class="text-gray-600">Tampilan yang menarik dan modern membuat pengalaman mencatat lebih menyenangkan.</p>
+          </div>
+          <div class="bg-gradient-to-br from-yellow-50 to-pink-50 rounded-2xl p-8 hover:shadow-xl transform hover:scale-105 transition duration-200">
+            <div class="text-5xl mb-4">📱</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3">Multi-Device</h3>
+            <p class="text-gray-600">Gunakan di smartphone, tablet, atau komputer dengan tampilan yang responsif.</p>
+          </div>
+          <div class="bg-gradient-to-br from-purple-50 to-green-50 rounded-2xl p-8 hover:shadow-xl transform hover:scale-105 transition duration-200">
+            <div class="text-5xl mb-4">🔍</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3">Pencarian Mudah</h3>
+            <p class="text-gray-600">Temukan catatan Anda dengan cepat menggunakan fitur pencarian yang powerful.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="py-20 bg-gradient-to-r from-purple-600 to-pink-600">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="grid md:grid-cols-3 gap-8 text-center text-white">
+          <div>
+            <div class="text-5xl font-bold mb-2">1000+</div>
+            <div class="text-xl">Pengguna Aktif</div>
+          </div>
+          <div>
+            <div class="text-5xl font-bold mb-2">10K+</div>
+            <div class="text-xl">Catatan Dibuat</div>
+          </div>
+          <div>
+            <div class="text-5xl font-bold mb-2">99%</div>
+            <div class="text-xl">Kepuasan Pengguna</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+      <div class="max-w-4xl mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-gray-800 mb-4">Hubungi Kami</h2>
+          <p class="text-xl text-gray-600">Punya pertanyaan? Kami siap membantu Anda!</p>
+        </div>
+        <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 shadow-xl">
+          <form method="post" action="{% url 'contact_whatsapp' %}" class="space-y-6">
+            {% csrf_token %}
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">Nama</label>
+              <input type="text" name="nama" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="Masukkan nama Anda" />
+            </div>
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">Email</label>
+              <input type="email" name="email" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="email@example.com" />
+            </div>
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">Pesan</label>
+              <textarea
+                name="pesan"
+                rows="5"
+                required
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition resize-none"
+                placeholder="Tulis pesan Anda di sini..."
+              ></textarea>
+            </div>
+            <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition duration-200 flex items-center justify-center gap-2">
+              <span>💬</span>
+              Kirim via WhatsApp
+            </button>
+          </form>
+          <div class="mt-8 text-center space-y-2">
+            <p class="text-gray-700"><span class="font-semibold">Email:</span> support@mynotepad.com</p>
+            <p class="text-gray-700"><span class="font-semibold">Telepon:</span> +62 895-0190-9756</p>
+            <p class="text-gray-700"><span class="font-semibold">Alamat:</span> Jakarta, Indonesia</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="grid md:grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-2xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">MyNotepad</h3>
+            <p class="text-gray-400">Aplikasi catatan digital terbaik untuk produktivitas Anda.</p>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Menu</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#features" class="hover:text-purple-400 transition">Fitur</a></li>
+              <li><a href="{% url 'about' %}" class="hover:text-purple-400 transition">Tentang Kami</a></li>
+              <li><a href="{% url 'gallery' %}" class="hover:text-purple-400 transition">Galeri</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Akun</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="{% url 'login' %}" class="hover:text-purple-400 transition">Masuk</a></li>
+              <li><a href="{% url 'register' %}" class="hover:text-purple-400 transition">Daftar</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Ikuti Kami</h4>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-purple-400 transition text-2xl">📘</a>
+              <a href="#" class="text-gray-400 hover:text-purple-400 transition text-2xl">📷</a>
+              <a href="#" class="text-gray-400 hover:text-purple-400 transition text-2xl">🐦</a>
+            </div>
+          </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+          <p>&copy; 2026 MyNotepad. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

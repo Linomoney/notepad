@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% block title %}Galeri - MyNotepad{% endblock %}
+{% block content %}
+<style>
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+  }
+</style>
+
+<!-- Navbar -->
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <div class="flex items-center">
+        <a href="{% url 'landing' %}" class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">MyNotepad</a>
+      </div>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex space-x-8">
+        <a href="{% url 'landing' %}#features" class="text-gray-700 hover:text-purple-600 transition">Fitur</a>
+        <a href="{% url 'about' %}" class="text-gray-700 hover:text-purple-600 transition">Tentang Kami</a>
+        <a href="{% url 'gallery' %}" class="text-purple-600 font-semibold">Galeri</a>
+        <a href="{% url 'landing' %}#contact" class="text-gray-700 hover:text-purple-600 transition">Kontak</a>
+      </div>
+
+      <!-- Desktop Auth Buttons -->
+      <div class="hidden md:flex space-x-4">
+        {% if user.is_authenticated %}
+        <a href="{% url 'home' %}" class="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition duration-200">Dashboard</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="px-4 py-2 text-purple-600 font-semibold hover:text-purple-700 transition">Masuk</a>
+        <a href="{% url 'register' %}" class="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition duration-200">Daftar</a>
+        {% endif %}
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button id="mobile-menu-button" class="text-gray-700 hover:text-purple-600 focus:outline-none">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            <path id="close-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+    <div class="px-4 pt-2 pb-4 space-y-2">
+      <a href="{% url 'landing' %}#features" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">Fitur</a>
+      <a href="{% url 'about' %}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">Tentang Kami</a>
+      <a href="{% url 'gallery' %}" class="block px-3 py-2 rounded-lg bg-purple-50 text-purple-600 font-semibold">Galeri</a>
+      <a href="{% url 'landing' %}#contact" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">Kontak</a>
+      <div class="pt-4 space-y-2">
+        {% if user.is_authenticated %}
+        <a href="{% url 'home' %}" class="block px-3 py-2 text-center rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:shadow-lg transition">Dashboard</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="block px-3 py-2 text-center rounded-lg text-purple-600 font-semibold border-2 border-purple-600 hover:bg-purple-50 transition">Masuk</a>
+        <a href="{% url 'register' %}" class="block px-3 py-2 text-center rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:shadow-lg transition">Daftar</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="py-20 px-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+  <div class="max-w-7xl mx-auto text-center fade-in-up">
+    <h1 class="text-5xl md:text-6xl font-bold mb-6">Galeri</h1>
+    <p class="text-xl md:text-2xl">Dokumentasi perjalanan kami dalam mengembangkan MyNotepad</p>
+  </div>
+</section>
+
+<!-- Gallery Grid -->
+<section class="py-20 px-4">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for photo in photos %}
+      <div class="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition duration-300 fade-in-up cursor-pointer" 
+           onclick="openModal('{{ photo.image }}', '{{ photo.title }}', '{{ photo.description }}')">
+        <img src="{{ photo.image }}" alt="{{ photo.title }}" class="w-full h-64 object-cover transform group-hover:scale-110 transition duration-300" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300">
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <h3 class="text-2xl font-bold mb-2">{{ photo.title }}</h3>
+            <p class="text-gray-200">{{ photo.description }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Behind the Scenes Section -->
+<section class="py-20 px-4 bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
+  <div class="max-w-4xl mx-auto text-center">
+    <h2 class="text-4xl font-bold text-gray-800 mb-6">Behind The Scenes</h2>
+    <p class="text-xl text-gray-600 mb-12">Setiap baris kode yang kami tulis adalah hasil kerja keras, kolaborasi, dan dedikasi tim kami untuk memberikan pengalaman terbaik bagi pengguna MyNotepad.</p>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <div class="text-4xl mb-3">💻</div>
+        <h3 class="font-bold text-xl mb-2">1000+ Jam Coding</h3>
+        <p class="text-gray-600">Waktu yang dihabiskan untuk development</p>
+      </div>
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <div class="text-4xl mb-3">☕</div>
+        <h3 class="font-bold text-xl mb-2">500+ Cangkir Kopi</h3>
+        <p class="text-gray-600">Bahan bakar kreativitas tim</p>
+      </div>
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <div class="text-4xl mb-3">🐛</div>
+        <h3 class="font-bold text-xl mb-2">200+ Bug Fixed</h3>
+        <p class="text-gray-600">Masalah yang berhasil diselesaikan</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid md:grid-cols-4 gap-8">
+      <div>
+        <h3 class="text-2xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">MyNotepad</h3>
+        <p class="text-gray-400">Aplikasi catatan digital terbaik untuk produktivitas Anda.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-4">Menu</h4>
+        <ul class="space-y-2 text-gray-400">
+          <li><a href="{% url 'landing' %}#features" class="hover:text-purple-400 transition">Fitur</a></li>
+          <li><a href="{% url 'about' %}" class="hover:text-purple-400 transition">Tentang Kami</a></li>
+          <li><a href="{% url 'gallery' %}" class="hover:text-purple-400 transition">Galeri</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-4">Akun</h4>
+        <ul class="space-y-2 text-gray-400">
+          <li><a href="{% url 'login' %}" class="hover:text-purple-400 transition">Masuk</a></li>
+          <li><a href="{% url 'register' %}" class="hover:text-purple-400 transition">Daftar</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-4">Ikuti Kami</h4>
+        <div class="flex space-x-4">
+          <a href="#" class="text-gray-400 hover:text-purple-400 transition text-2xl">📘</a>
+          <a href="#" class="text-gray-400 hover:text-purple-400 transition text-2xl">📷</a>
+          <a href="#" class="text-gray-400 hover:text-purple-400 transition text-2xl">🐦</a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+      <p>&copy; 2026 MyNotepad. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Image Modal -->
+<div id="imageModal" class="fixed inset-0 bg-black/90 hidden z-50 flex items-center justify-center px-4" onclick="closeModal()">
+  <div class="relative max-w-5xl w-full" onclick="event.stopPropagation()">
+    <!-- Close Button -->
+    <button onclick="closeModal()" class="absolute -top-12 right-0 text-white text-4xl hover:text-pink-400 transition z-10 bg-black/50 w-10 h-10 rounded-full flex items-center justify-center">
+      ✕
+    </button>
+
+    <!-- Image Container -->
+    <div class="bg-white rounded-xl overflow-hidden shadow-2xl">
+      <img id="modalImage" src="" alt="" class="w-full max-h-[70vh] object-contain" />
+      
+      <!-- Caption -->
+      <div class="p-6 bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+        <h3 id="modalTitle" class="text-2xl font-bold mb-2"></h3>
+        <p id="modalDesc" class="text-gray-100"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Mobile Menu Toggle
+  const mobileMenuButton = document.getElementById("mobile-menu-button");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const menuIcon = document.getElementById("menu-icon");
+  const closeIcon = document.getElementById("close-icon");
+
+  mobileMenuButton.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+    menuIcon.classList.toggle("hidden");
+    closeIcon.classList.toggle("hidden");
+  });
+
+  // Close menu when clicking on a link
+  const mobileMenuLinks = mobileMenu.querySelectorAll("a");
+  mobileMenuLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      mobileMenu.classList.add("hidden");
+      menuIcon.classList.remove("hidden");
+      closeIcon.classList.add("hidden");
+    });
+  });
+
+  // Modal Functions
+  function openModal(imageUrl, title, description) {
+    const modal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDesc = document.getElementById("modalDesc");
+
+    modalImage.src = imageUrl;
+    modalTitle.textContent = title;
+    modalDesc.textContent = description;
+    
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    const modal = document.getElementById("imageModal");
+    modal.classList.add("hidden");
+    document.body.style.overflow = "auto";
+  }
+
+  // Close modal with ESC key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+      closeModal();
+    }
+  });
+</script>
+{% endblock %}
