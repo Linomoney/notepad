@@ -12,7 +12,9 @@ WHATSAPP_NUMBER = '6289501909756'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'  # Redirect ke dashboard setelah login
 LOGOUT_REDIRECT_URL = 'landing'  # Redirect ke landing page setelah logout
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://notepad-production-ff9b.up.railway.app",
+]
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
