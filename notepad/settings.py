@@ -5,7 +5,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-your-secret-key-here'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'notepad-production-ff9b.up.railway.app',
+]
 WHATSAPP_NUMBER = '6289501909756'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'  # Redirect ke dashboard setelah login
